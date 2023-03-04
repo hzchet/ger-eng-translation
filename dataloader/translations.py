@@ -1,8 +1,5 @@
 import random
 
-UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-special_symbols = ['<unk>', '<pad>', '<bos>', '<eos>']
-
 
 class Translations:
     def __init__(self, path_to_folder: str = None, split: str = 'train', src: str = 'de', trg: str = 'en', subset: float = 0.3):

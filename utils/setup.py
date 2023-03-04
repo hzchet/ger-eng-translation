@@ -24,7 +24,7 @@ def setup():
     config = load_config(args.config)
     
     wandb.login(key=os.getenv('WANDB_API_KEY'))
-    wandb.init(login=os.getenv('WANDB_LOGIN'), name=args.run_name)
+    wandb.init(entity=os.getenv('WANDB_ENTITY'), project=os.getenv('WANDB_PROJECT'), name=args.run_name)
     
     torch.manual_seed(config['manual_seed'])
 

@@ -5,14 +5,15 @@ from .transforms import *
 from .translations import Translations
 
 
-def get_loader(split: str = 'train', batch_size: int = 128, path_to_folder: str = 'data', src='de', trg='en', subset=0.3):
+def get_loader(split: str = 'train', batch_size: int = 128, path_to_folder: str = 'data', src='de', trg='en', subset=0.3, min_freq=1):
     data = Translations(path_to_folder, split=split, subset=subset)
     space_tokenizer = get_tokenizer()
 
     transform = []
     vocab_sizes = []
+    src_transform, trg_vocab = None, None
     for i, ln in enumerate((src, trg)):
-        vocab_transform = get_vocab_transform(path_to_folder, space_tokenizer, ln)
+        vocab_transform = get_vocab_transform(path_to_folder, space_tokenizer, ln, min_freq)
         transform[i] = sequential_transforms(
             space_tokenizer,
             vocab_transform,
@@ -20,8 +21,10 @@ def get_loader(split: str = 'train', batch_size: int = 128, path_to_folder: str 
         )
         vocab_sizes[i] = len(vocab_transform)
 
+        trg_vocab = vocab_transform
+
     return DataLoader(
         data, 
         batch_size=batch_size,
         collate_fn=collate_fn(transform)
-    ), *vocab_sizes
+    ), *vocab_sizes, src_transform, vocab_transform

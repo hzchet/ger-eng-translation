@@ -17,11 +17,11 @@ def yield_tokens(tokenizer, data_iter: Translations, language: str) -> List[str]
         yield tokenizer(data_sample[language_index[language]])
 
 
-def get_vocab_transform(path_to_folder, tokenizer, ln):
+def get_vocab_transform(path_to_folder, tokenizer, ln, min_freq=1):
     train_iter = Translations(path_to_folder, split='train')
     vocab = build_vocab_from_iterator(
         yield_tokens(tokenizer, train_iter, ln),
-        min_freq=1,
+        min_freq=min_freq,
         specials=special_symbols,
         special_first=True
     )
